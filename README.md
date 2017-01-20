@@ -3,6 +3,8 @@ __A highly customisable, open source server software for Minecraft: Pocket Editi
 
 # ClearSky - A fast Minecraft PE server software based on [PocketMine-MP](https://github.com/pmmp/PocketMine-MP)
 ClearSky is a fast Minecraft: Pocket Edition server software, finally back as a real FORK of [PocketMine-MP](https://github.com/pmmp/PocketMine-MP)
+## Why ClearSky?
+#### Because our awesome, highly skilled Team is mostly focusing on making the server behave like singleplayer, whilest having high performant and clean code.
 - Please vote for a project name at https://github.com/ClearSkyTeam/PocketMine-MP/issues/1#issuecomment-272109777
 - The projects we take some code from are [pmmp](https://github.com/pmmp/PocketMine-MP), [Genisys](https://github.com/iTXTech/Genisys), [Nukkit](https://github.com/Nukkit/Nukkit) and [IM](https://github.com/ImagicalCorp/ImagicalMine) (last one is dead). Everytime we take code from other projects we reference the commit in the commit title or description! We may also just cherry-pick the commit.
 
@@ -64,4 +66,4 @@ Yes you can! Contributions are welcomed provided that they comply with our [Cont
 	You should have received a copy of the GNU Lesser General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pmmp/PocketMine and ClearSkyTeam/PocketMine is not affiliated with Mojang. All brands and trademarks belong to their respective owners. PocketMine-MP is not a Mojang-approved software, nor is it associated with Mojang.
+pmmp/PocketMine and ClearSkyTeam/PocketMine are not affiliated with Mojang. All brands and trademarks belong to their respective owners. PocketMine-MP is not a Mojang-approved software, nor is it associated with Mojang.
