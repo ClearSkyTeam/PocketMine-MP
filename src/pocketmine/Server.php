@@ -257,7 +257,7 @@ class Server{
 	 * @return string
 	 */
 	public function getName(){
-		return "PocketMine-MP";
+		return "Aurora";
 	}
 
 	/**
