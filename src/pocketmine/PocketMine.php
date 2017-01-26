@@ -74,9 +74,9 @@ namespace pocketmine {
 	use pocketmine\wizard\Installer;
 	use raklib\RakLib;
 
-	const VERSION = "1.6.2dev";
+	const VERSION = "1.2-php7";
 	const API_VERSION = "3.0.0-ALPHA2";
-	const CODENAME = "Unleashed";
+	const CODENAME = "sundown";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
