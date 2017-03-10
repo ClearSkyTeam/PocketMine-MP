@@ -7,6 +7,8 @@
 checkout:
  post:
    - git clone https://github.com/ClearSkyTeam/CI-Test
+   - git submodule sync
+   - git submodule update --init
 
 dependencies:
  override:
