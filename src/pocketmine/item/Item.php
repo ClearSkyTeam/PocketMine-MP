@@ -254,6 +254,7 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::COOKED_SALMON] = CookedSalmon::class;
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = GoldenAppleEnchanted::class;
 			// self::$list[self::CAMERA] = Camera::class;
+			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -546,6 +547,30 @@ class Item implements ItemIds, \JsonSerializable{
 
 		return null;
 	}
+
+	/**
+	 * @param int  $id
+	 * @param int  $level
+	 * @param bool $compareLevel
+	 * @return bool
+	 */
+	public function hasEnchantment(int $id, int $level = 1, bool $compareLevel = false) : bool{
+		if($this->hasEnchantments()){
+			foreach($this->getEnchantments() as $enchantment){
+				if($enchantment->getId() == $id){
+					if($compareLevel){
+						if($enchantment->getLevel() == $level){
+							return true;
+						}
+					}else{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 
 	/**
 	 * @param Enchantment $ench
