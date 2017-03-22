@@ -32,6 +32,7 @@ class Zombie extends Monster{
 	public $width = 0.6;
 	public $length = 0.6;
 	public $height = 1.8;
+	protected $maxHealth = 20;
 
 	public function getName(){
 		return "Zombie";
@@ -39,8 +40,8 @@ class Zombie extends Monster{
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
+		$pk->type = self::NETWORK_ID;
 		$pk->eid = $this->getId();
-		$pk->type = Zombie::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;

@@ -27,13 +27,14 @@ use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 
-class TransferServerCommand extends VanillaCommand{
+class TransferserverCommand extends VanillaCommand{
 
 	public function __construct($name){
 		parent::__construct(
 			$name,
 			"%pocketmine.command.transferserver.description",
-			"%pocketmine.command.transferserver.usage"
+			"%pocketmine.command.transferserver.usage",
+			["ts", "transfer"]
 		);
 		$this->setPermission("pocketmine.command.transferserver");
 	}

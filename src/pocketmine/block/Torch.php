@@ -41,7 +41,6 @@ class Torch extends Flowable{
 		return "Torch";
 	}
 
-
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
 			$below = $this->getSide(0);

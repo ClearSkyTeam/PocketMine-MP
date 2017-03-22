@@ -60,7 +60,7 @@ class StartGamePacket extends DataPacket{
 		$this->putEntityId($this->entityRuntimeId); //EntityRuntimeID
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat(0); //TODO: find out what these are (yaw/pitch?)
-		$this->putLFloat(0);
+		$this->putLFloat(0); // Those are a Vector2
 		$this->putVarInt($this->seed);
 		$this->putVarInt($this->dimension);
 		$this->putVarInt($this->generator);

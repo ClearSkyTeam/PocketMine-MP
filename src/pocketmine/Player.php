@@ -32,6 +32,7 @@ use pocketmine\entity\Human;
 use pocketmine\entity\Item as DroppedItem;
 use pocketmine\entity\Living;
 use pocketmine\entity\Projectile;
+use pocketmine\event\block\ItemFrameDropItemEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -62,6 +63,7 @@ use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\player\PlayerToggleFlightEvent;
+use pocketmine\event\player\PlayerToggleGlideEvent;
 use pocketmine\event\player\PlayerToggleSneakEvent;
 use pocketmine\event\player\PlayerToggleSprintEvent;
 use pocketmine\event\player\PlayerTransferEvent;
@@ -73,14 +75,17 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\inventory\BaseTransaction;
 use pocketmine\inventory\BigShapedRecipe;
 use pocketmine\inventory\BigShapelessRecipe;
+use pocketmine\inventory\ChestInventory;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
+use pocketmine\inventory\InventoryType;
 use pocketmine\inventory\PlayerInventory;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\inventory\SimpleTransactionGroup;
 use pocketmine\item\Item;
+use pocketmine\item\Tool;
 use pocketmine\level\ChunkLoader;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
@@ -135,6 +140,7 @@ use pocketmine\network\SourceInterface;
 use pocketmine\permission\PermissibleBase;
 use pocketmine\permission\PermissionAttachment;
 use pocketmine\plugin\Plugin;
+use pocketmine\tile\Beacon;
 use pocketmine\tile\ItemFrame;
 use pocketmine\tile\Spawnable;
 use pocketmine\utils\TextFormat;
@@ -1576,7 +1582,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					}
 					$this->inAirTicks = 0;
 				}else{
-					if(!$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
+					if(!$this->isGliding() and !$this->allowFlight and $this->inAirTicks > 10 and !$this->isSleeping() and !$this->isImmobile()){
 						$expectedVelocity = (-$this->gravity) / $this->drag - ((-$this->gravity) / $this->drag) * exp(-$this->drag * ($this->inAirTicks - $this->startAirTicks));
 						$diff = ($this->speed->y - $expectedVelocity) ** 2;
 
@@ -1940,7 +1946,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					$revert = true;
 					$this->forceMovement = new Vector3($this->x, $this->y, $this->z);
 				}
-
 				if($this->teleportPosition !== null or ($this->forceMovement instanceof Vector3 and ($newPos->distanceSquared($this->forceMovement) > 0.1 or $revert))){
 					$this->sendPosition($this->forceMovement, $packet->yaw, $packet->pitch, MovePlayerPacket::MODE_RESET);
 				}else{
@@ -2089,13 +2094,120 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 						if($snowball instanceof Projectile){
 							$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($snowball));
 							if($projectileEv->isCancelled()){
-								$snowball->kill();
+								$snowball->close();
 							}else{
 								$snowball->spawnToAll();
 								$this->level->addSound(new LaunchSound($this), $this->getViewers());
 							}
 						}else{
 							$snowball->spawnToAll();
+						}
+					}elseif($item->getId() === Item::ENDER_PEARL){
+						$nbt = new CompoundTag("", [
+							"Pos" => new ListTag("Pos", [
+								new DoubleTag("", $this->x),
+								new DoubleTag("", $this->y + $this->getEyeHeight()),
+								new DoubleTag("", $this->z)
+							]),
+							"Motion" => new ListTag("Motion", [
+								new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+								new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+								new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+							]),
+							"Rotation" => new ListTag("Rotation", [
+								new FloatTag("", $this->yaw),
+								new FloatTag("", $this->pitch)
+							]),
+						]);
+						$f = 1.5;
+						$enderpearl = Entity::createEntity("ThrownEnderPearl", $this->getLevel(), $nbt, $this);
+						$enderpearl->setMotion($enderpearl->getMotion()->multiply($f));
+						if($this->isSurvival()){
+							$item->setCount($item->getCount() - 1);
+							$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+						}
+						if($enderpearl instanceof Projectile){
+							$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($enderpearl));
+							if($projectileEv->isCancelled()){
+								$enderpearl->close();
+							}else{
+								$enderpearl->spawnToAll();
+								$this->level->addSound(new LaunchSound($this), $this->getViewers());
+							}
+						}else{
+							$enderpearl->spawnToAll();
+						}
+					}elseif($item->getId() === Item::SPLASH_POTION){
+						$nbt = new CompoundTag("", [
+							"Pos" => new ListTag("Pos", [
+								new DoubleTag("", $this->x),
+								new DoubleTag("", $this->y + $this->getEyeHeight()),
+								new DoubleTag("", $this->z)
+							]),
+							"Motion" => new ListTag("Motion", [
+								new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+								new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+								new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+							]),
+							"Rotation" => new ListTag("Rotation", [
+								new FloatTag("", $this->yaw),
+								new FloatTag("", $this->pitch)
+							]),
+						]);
+						$nbt->PotionId = new ShortTag("PotionId", $item->getDamage());
+						$f = 1.1;
+						$thrownpotion = Entity::createEntity("ThrownPotion", $this->getLevel(), $nbt, $this);
+						$thrownpotion->setMotion($thrownpotion->getMotion()->multiply($f));
+						if($this->isSurvival()){
+							$item->setCount($item->getCount() - 1);
+							$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+						}
+						if($thrownpotion instanceof Projectile){
+							$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($thrownpotion));
+							if($projectileEv->isCancelled()){
+								$thrownpotion->close();
+							}else{
+								$thrownpotion->spawnToAll();
+								$this->level->addSound(new LaunchSound($this), $this->getViewers());
+							}
+						}else{
+							$thrownpotion->spawnToAll();
+						}
+					}elseif($item->getId() === Item::LINGERING_POTION){
+						$nbt = new CompoundTag("", [
+							"Pos" => new ListTag("Pos", [
+								new DoubleTag("", $this->x),
+								new DoubleTag("", $this->y + $this->getEyeHeight()),
+								new DoubleTag("", $this->z)
+							]),
+							"Motion" => new ListTag("Motion", [
+								new DoubleTag("", -sin($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI)),
+								new DoubleTag("", -sin($this->pitch / 180 * M_PI)),
+								new DoubleTag("", cos($this->yaw / 180 * M_PI) * cos($this->pitch / 180 * M_PI))
+							]),
+							"Rotation" => new ListTag("Rotation", [
+								new FloatTag("", $this->yaw),
+								new FloatTag("", $this->pitch)
+							]),
+						]);
+						$nbt->PotionId = new ShortTag("PotionId", $item->getDamage());
+						$f = 1.1;
+						$thrownpotion = Entity::createEntity("LingeringPotion", $this->getLevel(), $nbt, $this);
+						$thrownpotion->setMotion($thrownpotion->getMotion()->multiply($f));
+						if($this->isSurvival()){
+							$item->setCount($item->getCount() - 1);
+							$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+						}
+						if($thrownpotion instanceof Projectile){
+							$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($thrownpotion));
+							if($projectileEv->isCancelled()){
+								$thrownpotion->close();
+							}else{
+								$thrownpotion->spawnToAll();
+								$this->level->addSound(new LaunchSound($this), $this->getViewers());
+							}
+						}else{
+							$thrownpotion->spawnToAll();
 						}
 					}
 
@@ -2301,6 +2413,24 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->setSneaking(false);
 						}
 						break 2;
+					case PlayerActionPacket::ACTION_START_GLIDE:
+						$ev = new PlayerToggleGlideEvent($this, true);
+						$this->server->getPluginManager()->callEvent($ev);
+						if($ev->isCancelled()){
+							$this->sendData($this);
+						}else{
+							$this->setGliding(true);
+						}
+						break 2;
+					case PlayerActionPacket::ACTION_STOP_GLIDE:
+						$ev = new PlayerToggleGlideEvent($this, false);
+						$this->server->getPluginManager()->callEvent($ev);
+						if($ev->isCancelled()){
+							$this->sendData($this);
+						}else{
+							$this->setGliding(false);
+						}
+						break 2;
 					default:
 						assert(false, "Unhandled player action " . $packet->action . " from " . $this->getName());
 				}
@@ -2472,6 +2602,22 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 								}
 
 								$this->exhaust(0.3, PlayerExhaustEvent::CAUSE_ATTACK);
+							}
+						}
+						break;
+					case InteractPacket::ACTION_RIGHT_CLICK:
+						if ($target instanceof Entity) {
+							$item = $this->inventory->getItemInHand();
+							if ($item->useOn($target)) {
+								if ($item instanceof Tool and $item->getDamage() >= $item->getMaxDurability()) {
+									$this->inventory->setItemInHand(Item::get(Item::AIR));
+								} else {
+									$newItem = clone $item;
+									$newItem->setCount($item->getCount() - 1);
+									$this->inventory->setItemInHand($newItem??Item::get(Item::AIR));
+								}
+							} else {
+								$this->inventory->setItemInHand($item);
 							}
 						}
 						break;
@@ -2908,24 +3054,20 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}
 				break;
 			case ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET:
-				if($this->spawned === false or !$this->isAlive()){
+				if ($this->spawned === false or !$this->isAlive()) {
 					break;
 				}
-
 				$tile = $this->level->getTile($this->temporalVector->setComponents($packet->x, $packet->y, $packet->z));
-				if($tile instanceof ItemFrame){
-					if($this->isSpectator()){
-						$tile->spawnTo($this);
-						break;
+				if ($tile instanceof ItemFrame) {
+					$this->getServer()->getPluginManager()->callEvent($ev = new ItemFrameDropItemEvent($this->getLevel()->getBlock($tile), $this, $tile->getItem(), $tile->getItemDropChance()));
+					if (!$ev->isCancelled()) {
+						if (lcg_value() <= $ev->getItemDropChance()) {
+							if ($this->getGamemode() !== self::CREATIVE && $this->getGamemode() !== self::SPECTATOR)
+								$this->getLevel()->dropItem($tile->add(0.5,0.5, 0.5), $ev->getDropItem());
+						}
+						$tile->setItem();
 					}
-
-					if(lcg_value() <= $tile->getItemDropChance()){
-						$this->level->dropItem($tile->getBlock(), $tile->getItem());
-					}
-					$tile->setItem(null);
-					$tile->setItemRotation(0);
 				}
-
 				break;
 			default:
 				break;
@@ -2943,20 +3085,17 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	 *
 	 * @return bool if transfer was successful.
 	 */
-	public function transfer(string $address, int $port = 19132, string $message = "transfer") : bool{
-		$this->server->getPluginManager()->callEvent($ev = new PlayerTransferEvent($this, $address, $port, $message));
-
-		if(!$ev->isCancelled()){
-			$pk = new TransferPacket();
-			$pk->address = $ev->getAddress();
-			$pk->port = $ev->getPort();
-			$this->dataPacket($pk);
-			$this->close("", $ev->getMessage(), false);
-
-			return true;
+	public function transfer(string $address, int $port = 19132) {
+		$this->server->getPluginManager()->callEvent($ev = new PlayerTransferEvent($this, $address, $port));
+		if ($ev->isCancelled()) {
+			return false;
 		}
-
-		return false;
+		$pk = new TransferPacket();
+		$pk->address = $ev->getAddress();
+		$pk->port = $ev->getPort();
+		$this->dataPacket($pk);
+		Command::broadcastCommandMessage($this, new TranslationContainer("Transferred to {%0}:{%1}", [$ev->getAddress(), $ev->getPort()]));
+		return true;
 	}
 
 	/**
@@ -3362,6 +3501,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$source->setCancelled();
 		}elseif($this->allowFlight and $source->getCause() === EntityDamageEvent::CAUSE_FALL){
 			$source->setCancelled();
+		}elseif(!$this->allowFlight and $source->getCause() === EntityDamageEvent::CAUSE_FALL && ($this->isGliding() || $this->getInventory()->getItem($this->getInventory()->getSize() + 1)->getId() === Item::ELYTRA)){/*due to lag it could happen that you first close the Elytra and then take damage, so i add a slot check*/
+			$source->setDamage($damage = $this->getMotion()->distance($this->speed));//TODO: Check if this is correct. The faster, the more damage#Elytra
+            print "Damage dealed is $damage".PHP_EOL;
 		}
 
 		parent::attack($damage, $source);

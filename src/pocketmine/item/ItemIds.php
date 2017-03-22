@@ -137,7 +137,7 @@ interface ItemIds extends BlockIds{
 	const RAW_CHICKEN = 365;
 	const COOKED_CHICKEN = 366;
 	const ROTTEN_FLESH = 367;
-
+	const ENDER_PEARL = 368;
 	const BLAZE_ROD = 369;
 	const GHAST_TEAR = 370;
 	const GOLD_NUGGET = 371, GOLDEN_NUGGET = 371;
@@ -150,7 +150,7 @@ interface ItemIds extends BlockIds{
 	const MAGMA_CREAM = 378;
 	const BREWING_STAND = 379;
 	const CAULDRON = 380;
-
+	const EYE_OF_ENDER = 381;
 	const GLISTERING_MELON = 382;
 	const SPAWN_EGG = 383;
 	const BOTTLE_O_ENCHANTING = 384, ENCHANTING_BOTTLE = 384;
@@ -184,7 +184,7 @@ interface ItemIds extends BlockIds{
 	const RABBIT_STEW = 413;
 	const RABBIT_FOOT = 414;
 	const RABBIT_HIDE = 415;
-	const LEATHER_HORSE_ARMOR = 416; //I hate being forced to spell this wrong
+	const LEATHER_HORSE_ARMOR = 416; //I hate being a british guy and thinking i am spelling everything wrong # dktapps, 2016 - 2017
 	const IRON_HORSE_ARMOR = 417;
 	const GOLD_HORSE_ARMOR = 418;
 	const DIAMOND_HORSE_ARMOR = 419;
@@ -194,13 +194,22 @@ interface ItemIds extends BlockIds{
 	const RAW_MUTTON = 423;
 	const COOKED_MUTTON = 424;
 
+	const END_CRYSTAL = 426;
 	const SPRUCE_DOOR = 427;
 	const BIRCH_DOOR = 428;
 	const JUNGLE_DOOR = 429;
 	const ACACIA_DOOR = 430;
 	const DARK_OAK_DOOR = 431;
+	const CHORUS_FRUIT = 432;
+	const POPPED_CHORUS_FRUIT = 433;
 
+	const DRAGON_BREATH = 437;
 	const SPLASH_POTION = 438;
+
+	const LINGERING_POTION = 441;
+
+	const ELYTRA = 444;
+	const SHULKER_SHELL = 445;
 
 	const BEETROOT = 457;
 	const BEETROOT_SEEDS = 458, BEETROOT_SEED = 458;

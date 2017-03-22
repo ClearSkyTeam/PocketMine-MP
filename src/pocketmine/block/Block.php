@@ -162,6 +162,8 @@ class Block extends Position implements BlockIds, Metadatable{
 
 			self::$list[self::LIT_PUMPKIN] = LitPumpkin::class;
 			self::$list[self::CAKE_BLOCK] = Cake::class;
+			self::$list[self::UNPOWERED_REPEATER_BLOCK] = UnpoweredRepeater::class;
+			self::$list[self::POWERED_REPEATER_BLOCK] = PoweredRepeater::class;
 
 			self::$list[self::TRAPDOOR] = Trapdoor::class;
 
@@ -182,21 +184,27 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::NETHER_BRICKS] = NetherBrick::class;
 			self::$list[self::NETHER_BRICK_FENCE] = NetherBrickFence::class;
 			self::$list[self::NETHER_BRICKS_STAIRS] = NetherBrickStairs::class;
-
+			#self::$list[self::NETHER_WART_BLOCK] = NetherWart::class;
 			self::$list[self::ENCHANTING_TABLE] = EnchantingTable::class;
 			self::$list[self::BREWING_STAND_BLOCK] = BrewingStand::class;
+			self::$list[self::CAULDRON_BLOCK] = Cauldron::class;
+			#self::$list[self::END_PORTAL_BLOCK] = EndPortal::class;
 			self::$list[self::END_PORTAL_FRAME] = EndPortalFrame::class;
 			self::$list[self::END_STONE] = EndStone::class;
+			self::$list[self::DRAGON_EGG] = DragonEgg::class;
 			self::$list[self::REDSTONE_LAMP] = RedstoneLamp::class;
 			self::$list[self::LIT_REDSTONE_LAMP] = LitRedstoneLamp::class;
 			self::$list[self::SANDSTONE_STAIRS] = SandstoneStairs::class;
 			self::$list[self::EMERALD_ORE] = EmeraldOre::class;
+			self::$list[self::ENDER_CHEST] = EnderChest::class;
 			self::$list[self::TRIPWIRE_HOOK] = TripwireHook::class;
 			self::$list[self::TRIPWIRE] = Tripwire::class;
 			self::$list[self::EMERALD_BLOCK] = Emerald::class;
 			self::$list[self::SPRUCE_WOOD_STAIRS] = SpruceWoodStairs::class;
 			self::$list[self::BIRCH_WOOD_STAIRS] = BirchWoodStairs::class;
 			self::$list[self::JUNGLE_WOOD_STAIRS] = JungleWoodStairs::class;
+
+			self::$list[self::BEACON] = Beacon::class;
 			self::$list[self::STONE_WALL] = StoneWall::class;
 			self::$list[self::FLOWER_POT_BLOCK] = FlowerPot::class;
 			self::$list[self::CARROT_BLOCK] = Carrot::class;
@@ -207,9 +215,11 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::TRAPPED_CHEST] = TrappedChest::class;
 			self::$list[self::WEIGHTED_PRESSURE_PLATE_LIGHT] = WeightedPressurePlateLight::class;
 			self::$list[self::WEIGHTED_PRESSURE_PLATE_HEAVY] = WeightedPressurePlateHeavy::class;
-
+			self::$list[self::UNPOWERED_COMPARATOR_BLOCK] = UnpoweredComparator::class;
+			self::$list[self::POWERED_COMPARATOR_BLOCK] = PoweredComparator::class;
 			self::$list[self::DAYLIGHT_SENSOR] = DaylightSensor::class;
 			self::$list[self::REDSTONE_BLOCK] = Redstone::class;
+			self::$list[self::NETHER_QUARTZ_ORE] = NetherQuartzOre::class;
 
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
 			self::$list[self::QUARTZ_STAIRS] = QuartzStairs::class;
@@ -217,6 +227,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::WOOD_SLAB] = WoodSlab::class;
 			self::$list[self::STAINED_CLAY] = StainedClay::class;
 
+			//self::$list[self::STAINED_GLASS_PANE] = StainedGlassPane::class;
 			self::$list[self::LEAVES2] = Leaves2::class;
 			self::$list[self::WOOD2] = Wood2::class;
 			self::$list[self::ACACIA_WOOD_STAIRS] = AcaciaWoodStairs::class;
@@ -224,6 +235,10 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::PRISMARINE] = Prismarine::class;
 			self::$list[self::SEA_LANTERN] = SeaLantern::class;
 			self::$list[self::IRON_TRAPDOOR] = IronTrapdoor::class;
+
+			self::$list[self::PRISMARINE] = Prismarine::class;
+			self::$list[self::SEA_LANTERN] = SeaLantern::class;
+
 			self::$list[self::HAY_BALE] = HayBale::class;
 			self::$list[self::CARPET] = Carpet::class;
 			self::$list[self::HARDENED_CLAY] = HardenedClay::class;
@@ -231,20 +246,40 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::PACKED_ICE] = PackedIce::class;
 			self::$list[self::DOUBLE_PLANT] = DoublePlant::class;
 
+            self::$list[self::DOUBLE_SLAB2] = DoubleSlab2::class;
+            self::$list[self::SLAB2] = Slab2::class;
 			self::$list[self::FENCE_GATE_SPRUCE] = FenceGateSpruce::class;
 			self::$list[self::FENCE_GATE_BIRCH] = FenceGateBirch::class;
 			self::$list[self::FENCE_GATE_JUNGLE] = FenceGateJungle::class;
 			self::$list[self::FENCE_GATE_DARK_OAK] = FenceGateDarkOak::class;
 			self::$list[self::FENCE_GATE_ACACIA] = FenceGateAcacia::class;
 
-			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
-
+			self::$list[self::SPRUCE_DOOR_BLOCK] = SpruceDoor::class;
+			self::$list[self::BIRCH_DOOR_BLOCK] = BirchDoor::class;
+			self::$list[self::JUNGLE_DOOR_BLOCK] = JungleDoor::class;
+			self::$list[self::ACACIA_DOOR_BLOCK] = AcaciaDoor::class;
+			self::$list[self::DARK_OAK_DOOR_BLOCK] = DarkOakDoor::class;
 			self::$list[self::GRASS_PATH] = GrassPath::class;
+			self::$list[self::ITEM_FRAME_BLOCK] = ItemFrame::class;
+			self::$list[self::CHORUS_FLOWER] = ChorusFlower::class;
+			self::$list[self::PURPUR] = PurpurBlock::class;
+
+			self::$list[self::PURPUR_STAIRS] = PurpurStairs::class;
+
+			self::$list[self::END_BRICKS] = EndBricks::class;
+
+			self::$list[self::END_ROD] = EndRod::class;
+			#self::$list[self::END_GATEWAY] = EndGateway::class;
+
+			self::$list[self::CHORUS_PLANT] = ChorusPlant::class;
+			#self::$list[self::STAINED_GLASS] = StainedGlass::class;
 
 			self::$list[self::PODZOL] = Podzol::class;
 			self::$list[self::BEETROOT_BLOCK] = Beetroot::class;
 			self::$list[self::STONECUTTER] = Stonecutter::class;
 			self::$list[self::GLOWING_OBSIDIAN] = GlowingObsidian::class;
+			self::$list[self::PISTON] = Piston::class;
+			self::$list[self::STICKY_PISTON] = StickyPiston::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){

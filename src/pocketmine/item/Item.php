@@ -152,6 +152,7 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::WOODEN_DOOR] = WoodenDoor::class;
 			self::$list[self::BUCKET] = Bucket::class;
 			self::$list[self::MINECART] = Minecart::class;
+			self::$list[self::SADDLE] = Saddle::class;
 			self::$list[self::IRON_DOOR] = IronDoor::class;
 			self::$list[self::REDSTONE] = Redstone::class;
 			self::$list[self::SNOWBALL] = Snowball::class;
@@ -168,13 +169,14 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::FISHING_ROD] = FishingRod::class;
 			self::$list[self::CLOCK] = Clock::class;
 			self::$list[self::GLOWSTONE_DUST] = GlowstoneDust::class;
-			self::$list[self::RAW_FISH] = Fish::class;
+			self::$list[self::RAW_FISH] = RawFish::class;
 			self::$list[self::COOKED_FISH] = CookedFish::class;
 			self::$list[self::DYE] = Dye::class;
 			self::$list[self::BONE] = Bone::class;
 			self::$list[self::SUGAR] = Sugar::class;
 			self::$list[self::CAKE] = Cake::class;
 			self::$list[self::BED] = Bed::class;
+			self::$list[self::REPEATER] = Repeater::class;
 			self::$list[self::COOKIE] = Cookie::class;
 			self::$list[self::SHEARS] = Shears::class;
 			self::$list[self::MELON] = Melon::class;
@@ -184,6 +186,10 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::STEAK] = Steak::class;
 			self::$list[self::RAW_CHICKEN] = RawChicken::class;
 			self::$list[self::COOKED_CHICKEN] = CookedChicken::class;
+			self::$list[self::ROTTEN_FLESH] = RottenFlesh::class;
+			self::$list[self::ENDER_PEARL] = EnderPearl::class;
+			self::$list[self::BLAZE_ROD] = BlazeRod::class;
+			self::$list[self::GHAST_TEAR] = GhastTear::class;
 			self::$list[self::GOLD_NUGGET] = GoldNugget::class;
 			self::$list[self::NETHER_WART] = NetherWart::class;
 			self::$list[self::POTION] = Potion::class;
@@ -193,29 +199,62 @@ class Item implements ItemIds, \JsonSerializable{
 			self::$list[self::BLAZE_POWDER] = BlazePowder::class;
 			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
 			self::$list[self::BREWING_STAND] = BrewingStand::class;
+			self::$list[self::CAULDRON] = Cauldron::class;
+			self::$list[self::EYE_OF_ENDER] = EyeOfEnder::class;
 			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
 			self::$list[self::SPAWN_EGG] = SpawnEgg::class;
+			self::$list[self::FIRE_CHARGE] = FireCharge::class;
 			self::$list[self::EMERALD] = Emerald::class;
 			self::$list[self::ITEM_FRAME] = ItemFrame::class;
 			self::$list[self::FLOWER_POT] = FlowerPot::class;
 			self::$list[self::CARROT] = Carrot::class;
 			self::$list[self::POTATO] = Potato::class;
 			self::$list[self::BAKED_POTATO] = BakedPotato::class;
+			self::$list[self::POISONOUS_POTATO] = PoisonousPotato::class;
 			self::$list[self::GOLDEN_CARROT] = GoldenCarrot::class;
 			self::$list[self::MOB_HEAD] = MobHead::class;
+			self::$list[self::CARROT_ON_A_STICK] = CarrotOnAStick::class;
+			self::$list[self::NETHER_STAR] = NetherStar::class;
 			self::$list[self::PUMPKIN_PIE] = PumpkinPie::class;
+			self::$list[self::COMPARATOR] = Comparator::class;
 			self::$list[self::NETHER_BRICK] = NetherBrick::class;
 			self::$list[self::QUARTZ] = Quartz::class;
-			self::$list[self::QUARTZ] = NetherQuartz::class;
+			self::$list[self::PRISMARINE_SHARD] = PrismarineShard::class;
+			self::$list[self::RAW_RABBIT] = RawRabbit::class;
 			self::$list[self::COOKED_RABBIT] = CookedRabbit::class;
-			// self::$list[self::CAMERA] = Camera::class;
+			self::$list[self::RABBIT_STEW] = RabbitStew::class;
+			self::$list[self::RABBIT_FOOT] = RabbitFoot::class;
+			self::$list[self::RABBIT_HIDE] = RabbitHide::class;
+			self::$list[self::LEATHER_HORSE_ARMOR] = LeatherHorseArmor::class;
+			self::$list[self::IRON_HORSE_ARMOR] = IronHorseArmor::class;
+			self::$list[self::GOLD_HORSE_ARMOR] = GoldHorseArmor::class;
+			self::$list[self::DIAMOND_HORSE_ARMOR] = DiamondHorseArmor::class;
+			self::$list[self::NAMETAG] = Nametag::class;
+			self::$list[self::PRISMARINE_CRYSTALS] = PrismarineCrystals::class;
+			self::$list[self::RAW_MUTTON] = RawMutton::class;
+			self::$list[self::COOKED_MUTTON] = CookedMutton::class;
+			self::$list[self::END_CRYSTAL] = EndCrystal::class;
+			self::$list[self::SPRUCE_DOOR] = SpruceDoor::class;
+			self::$list[self::BIRCH_DOOR] = BirchDoor::class;
+			self::$list[self::JUNGLE_DOOR] = JungleDoor::class;
+			self::$list[self::ACACIA_DOOR] = AcaciaDoor::class;
+			self::$list[self::DARK_OAK_DOOR] = DarkOakDoor::class;
+			self::$list[self::POPPED_CHORUS_FRUIT] = PoppedChorusFruit::class;
+			self::$list[self::DRAGON_BREATH] = DragonBreath::class;
+			self::$list[self::SPLASH_POTION] = SplashPotion::class;
+			self::$list[self::LINGERING_POTION] = LingeringPotion::class;
+			self::$list[self::ELYTRA] = Elytra::class;
+			self::$list[self::SHULKER_SHELL] = ShulkerShell::class;
 			self::$list[self::BEETROOT] = Beetroot::class;
 			self::$list[self::BEETROOT_SEEDS] = BeetrootSeeds::class;
 			self::$list[self::BEETROOT_SOUP] = BeetrootSoup::class;
-			self::$list[self::PRISMARINE_CRYSTALS] = PrismarineCrystals::class;
-			self::$list[self::PRISMARINE_SHARD] = PrismarineShard::class;
-			self::$list[self::NETHER_STAR] = NetherStar::class;
+			self::$list[self::RAW_SALMON] = RawSalmon::class;
+			self::$list[self::CLOWN_FISH] = Clownfish::class;
+			self::$list[self::PUFFER_FISH] = PufferFish::class;
+			self::$list[self::COOKED_SALMON] = CookedSalmon::class;
 			self::$list[self::ENCHANTED_GOLDEN_APPLE] = GoldenAppleEnchanted::class;
+			// self::$list[self::CAMERA] = Camera::class;
+			self::$list[self::ENCHANTED_BOOK] = EnchantedBook::class;
 
 			for($i = 0; $i < 256; ++$i){
 				if(Block::$list[$i] !== null){
@@ -508,6 +547,30 @@ class Item implements ItemIds, \JsonSerializable{
 
 		return null;
 	}
+
+	/**
+	 * @param int  $id
+	 * @param int  $level
+	 * @param bool $compareLevel
+	 * @return bool
+	 */
+	public function hasEnchantment(int $id, int $level = 1, bool $compareLevel = false) : bool{
+		if($this->hasEnchantments()){
+			foreach($this->getEnchantments() as $enchantment){
+				if($enchantment->getId() == $id){
+					if($compareLevel){
+						if($enchantment->getLevel() == $level){
+							return true;
+						}
+					}else{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 
 	/**
 	 * @param Enchantment $ench

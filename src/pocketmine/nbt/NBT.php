@@ -386,6 +386,19 @@ class NBT{
 		return $key;
 	}
 
+	public static function combineCompoundTags(CompoundTag $nbt, CompoundTag $nbtExtra, $override = false) {
+		$tag = clone $nbt;
+		foreach ($nbtExtra as $k => $v) {
+			if (!($v instanceof Tag)) {
+				continue;
+			}
+			if (!isset($tag->{$k}) or (isset($tag->{$k}) and $override)) {
+				$tag->{$k} = clone $v;
+			}
+		}
+		return $tag;
+	}
+
 	public function get($len){
 		if($len < 0){
 			$this->offset = strlen($this->buffer) - 1;

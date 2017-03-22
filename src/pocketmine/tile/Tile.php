@@ -34,15 +34,27 @@ use pocketmine\nbt\tag\StringTag;
 
 abstract class Tile extends Position{
 
-	const BREWING_STAND = "BrewingStand";
-	const CHEST = "Chest";
-	const ENCHANT_TABLE = "EnchantTable";
-	const FLOWER_POT = "FlowerPot";
-	const FURNACE = "Furnace";
-	const ITEM_FRAME = "ItemFrame";
-	const MOB_SPAWNER = "MobSpawner";
-	const SIGN = "Sign";
-	const SKULL = "Skull";
+    const BEACON = "Beacon";
+    const BREWING_STAND = "BrewingStand";
+    const CAULDRON = "Cauldron";
+    const CHEST = "Chest";
+    const COMPARATOR = "Comparator";
+    const DAY_LIGHT_DETECTOR = "DLDetector";
+    const DISPENSER = "Dispenser";
+    const DROPPER = "Dropper";
+    const ENCHANT_TABLE = "EnchantTable";
+    const ENDER_CHEST = "EnderChest";
+    const END_PORTAL = "EndPortal";
+    const FURNACE = "Furnace";
+    const FLOWER_POT = "FlowerPot";
+    const HOPPER = "Hopper";
+    const ITEM_FRAME = "ItemFrame";
+    const MOB_SPAWNER = "MobSpawner";
+    const MOVING_BLOCK = "MovingBlock";
+    const NOTEBLOCK = "Music";
+    const PISTON = "PistonArm";
+    const SIGN = "Sign";
+    const SKULL = "Skull";
 
 	public static $tileCount = 1;
 
@@ -65,11 +77,18 @@ abstract class Tile extends Position{
 	public $tickTimer;
 
 	public static function init(){
+        self::registerTile(Beacon::class);
+        self::registerTile(BrewingStand::class);
+		self::registerTile(Cauldron::class);
 		self::registerTile(Chest::class);
-		self::registerTile(EnchantTable::class);
+        self::registerTile(EnchantTable::class);
+        self::registerTile(EnderChest::class);
+        self::registerTile(EndPortal::class);
 		self::registerTile(FlowerPot::class);
 		self::registerTile(Furnace::class);
-		self::registerTile(ItemFrame::class);
+        self::registerTile(ItemFrame::class);
+        self::registerTile(MovingBlock::class);
+        self::registerTile(PistonArm::class);
 		self::registerTile(Sign::class);
 		self::registerTile(Skull::class);
 	}

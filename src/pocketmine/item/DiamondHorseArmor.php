@@ -21,9 +21,8 @@
 
 namespace pocketmine\item;
 
-class NetherQuartz extends Item{
+class DiamondHorseArmor extends Item{//Item?
 	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::NETHER_QUARTZ, 0, $count, "Nether Quartz");
+		parent::__construct(self::DIAMOND_HORSE_ARMOR, $meta, $count, "Diamond Horse Armor");
 	}
-
 }

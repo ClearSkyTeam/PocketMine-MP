@@ -37,8 +37,8 @@ class Effect{
 	const FATIGUE = 4;
 	const MINING_FATIGUE = 4;
 	const STRENGTH = 5;
-//	TODO: const HEALING = 6;
-//	TODO: const HARMING = 7;
+	const HEALING = 6; // TODO implement
+	const HARMING = 7; // TODO implement
 	const JUMP = 8;
 	const NAUSEA = 9;
 	const CONFUSION = 9;
@@ -68,8 +68,8 @@ class Effect{
 		self::$effects[Effect::SWIFTNESS] = new Effect(Effect::SWIFTNESS, "%potion.digSpeed", 217, 192, 67);
 		self::$effects[Effect::FATIGUE] = new Effect(Effect::FATIGUE, "%potion.digSlowDown", 74, 66, 23, true);
 		self::$effects[Effect::STRENGTH] = new Effect(Effect::STRENGTH, "%potion.damageBoost", 147, 36, 35);
-		//self::$effects[Effect::HEALING] = new InstantEffect(Effect::HEALING, "%potion.heal", 248, 36, 35);
-		//self::$effects[Effect::HARMING] = new InstantEffect(Effect::HARMING, "%potion.harm", 67, 10, 9, true);
+		self::$effects[Effect::HEALING] = new InstantEffect(Effect::HEALING, "%potion.heal", 248, 36, 35);
+		self::$effects[Effect::HARMING] = new InstantEffect(Effect::HARMING, "%potion.harm", 67, 10, 9, true);
 		self::$effects[Effect::JUMP] = new Effect(Effect::JUMP, "%potion.jump", 34, 255, 76);
 		self::$effects[Effect::NAUSEA] = new Effect(Effect::NAUSEA, "%potion.confusion", 85, 29, 74, true);
 		self::$effects[Effect::REGENERATION] = new Effect(Effect::REGENERATION, "%potion.regeneration", 205, 92, 171);
@@ -273,27 +273,29 @@ class Effect{
 			$entity->dataPacket($pk);
 		}
 
-		if($this->id === Effect::INVISIBILITY){
-			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
-			$entity->setNameTagVisible(false);
-		}elseif($this->id === Effect::SPEED){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			if($ev->willModify() and $oldEffect !== null){
-				$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
-			}else{
-				$speed = $attr->getValue();
+		if($entity instanceof Living) {
+			if ($this->id === Effect::INVISIBILITY) {
+				$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
+				$entity->setNameTagVisible(false);
+			} elseif ($this->id === Effect::SPEED) {
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				if ($ev->willModify() and $oldEffect !== null) {
+					$speed = $attr->getValue() / (1 + 0.2 * $oldEffect->getAmplifier());
+				} else {
+					$speed = $attr->getValue();
+				}
+				$speed *= (1 + 0.2 * $this->amplifier);
+				$attr->setValue($speed);
+			} elseif ($this->id === Effect::SLOWNESS) {
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				if ($ev->willModify() and $oldEffect !== null) {
+					$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
+				} else {
+					$speed = $attr->getValue();
+				}
+				$speed *= (1 - 0.15 * $this->amplifier);
+				$attr->setValue($speed, true);
 			}
-			$speed *= (1 + 0.2 * $this->amplifier);
-			$attr->setValue($speed);
-		}elseif($this->id === Effect::SLOWNESS){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			if($ev->willModify() and $oldEffect !== null){
-				$speed = $attr->getValue() / (1 - 0.15 * $oldEffect->getAmplifier());
-			}else{
-				$speed = $attr->getValue();
-			}
-			$speed *= (1 - 0.15 * $this->amplifier);
-			$attr->setValue($speed, true);
 		}
 	}
 
@@ -311,15 +313,17 @@ class Effect{
 			$entity->dataPacket($pk);
 		}
 
-		if($this->id === Effect::INVISIBILITY){
-			$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
-			$entity->setNameTagVisible(true);
-		}elseif($this->id === Effect::SPEED){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
-		}elseif($this->id === Effect::SLOWNESS){
-			$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-			$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
+		if($entity instanceof Living) {
+			if ($this->id === Effect::INVISIBILITY) {
+				$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, false);
+				$entity->setNameTagVisible(true);
+			} elseif ($this->id === Effect::SPEED) {
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				$attr->setValue($attr->getValue() / (1 + 0.2 * $this->amplifier));
+			} elseif ($this->id === Effect::SLOWNESS) {
+				$attr = $entity->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+				$attr->setValue($attr->getValue() / (1 - 0.15 * $this->amplifier));
+			}
 		}
 	}
 }

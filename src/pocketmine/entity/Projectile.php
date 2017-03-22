@@ -36,9 +36,12 @@ abstract class Projectile extends Entity{
 
 	const DATA_SHOOTER_ID = 17;
 
+	protected $maxHealth = 1;
+
 	/** @var Entity */
 	public $shootingEntity = null;
 	protected $damage = 0;
+	protected $isCritical;
 
 	public $hadCollision = false;
 
@@ -58,8 +61,6 @@ abstract class Projectile extends Entity{
 
 	protected function initEntity(){
 		parent::initEntity();
-
-		$this->setMaxHealth(1);
 		$this->setHealth(1);
 		if(isset($this->namedtag->Age)){
 			$this->age = $this->namedtag["Age"];
@@ -139,7 +140,7 @@ abstract class Projectile extends Entity{
 					$motion = sqrt($this->motionX ** 2 + $this->motionY ** 2 + $this->motionZ ** 2);
 					$damage = ceil($motion * $this->damage);
 
-					if($this instanceof Arrow and $this->isCritical){
+					if($this instanceof Arrow and $this->isCritical()){
 						$damage += mt_rand(0, (int) ($damage / 2) + 1);
 					}
 
@@ -194,4 +195,7 @@ abstract class Projectile extends Entity{
 		return $hasUpdate;
 	}
 
+	public function isCritical(){
+		return $this->isCritical;
+	}
 }

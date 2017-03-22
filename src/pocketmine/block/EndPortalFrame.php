@@ -23,6 +23,7 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\math\AxisAlignedBB;
+use pocketmine\Player;
 
 class EndPortalFrame extends Solid{
 
@@ -39,6 +40,10 @@ class EndPortalFrame extends Solid{
 	public function getName(){
 		return "End Portal Frame";
 	}
+
+    public function canBeActivated(){
+        return true;
+    }
 
 	public function getHardness(){
 		return -1;
@@ -63,4 +68,33 @@ class EndPortalFrame extends Solid{
 			$this->z + 1
 		);
 	}
+
+    public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+        $faces = [
+            0 => 3,
+            1 => 0,
+            2 => 1,
+            3 => 2,
+        ];
+        $this->meta = $faces[$player instanceof Player ? $player->getDirection() : 0];
+        $this->getLevel()->setBlock($block, $this, true, true);
+        return true;
+    }
+
+    public function onActivate(Item $item, Player $player = null){
+        if(($this->getDamage() & 0x04) === 0 && $player instanceof Player){
+            if($item->getId() === Item::EYE_OF_ENDER){
+                $this->setDamage($this->getDamage() + 4);
+                $this->getLevel()->setBlock($this, $this, true, true);
+                $this->createPortal();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function createPortal(){
+        return;
+    }
 }
