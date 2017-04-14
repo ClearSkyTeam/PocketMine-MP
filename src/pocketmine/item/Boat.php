@@ -47,11 +47,11 @@ class Boat extends Item{
 		}
 	}
 	
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int{
 		return 1;
 	}
 	
-	public function canBeActivated(){
+	public function canBeActivated() : bool{
 		return true;
 	}
 

@@ -27,7 +27,7 @@ class EnderPearl extends Item{
 		parent::__construct(self::ENDER_PEARL, 0, $count, "Ender Pearl");
 	}
 
-	public function getMaxStackSize(){
+	public function getMaxStackSize() : int{
 		return 16;
 	}
 

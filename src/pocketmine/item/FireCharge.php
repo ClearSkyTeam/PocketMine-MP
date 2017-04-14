@@ -32,7 +32,7 @@ class FireCharge extends Item {
 		parent::__construct(self::FIRE_CHARGE, $meta, $count, "Fire Charge");
 	}
 
-	public function canBeActivated() {
+	public function canBeActivated() :bool {
 		return true;
 	}
 

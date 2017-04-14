@@ -266,7 +266,7 @@ class Potion extends Food{
 		return $entity instanceof Human;
 	}
 	
-	public function getMaxStackSize() {
+	public function getMaxStackSize() : int {
 		return 1;
 	}
 }
