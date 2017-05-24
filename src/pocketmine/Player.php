@@ -3002,6 +3002,27 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			return true;
 		}
 
+        $ingredients_classic = [];
+        if(empty($packet->input)){//Classic UI hack
+            if(!$recipe instanceof ShapedRecipe){
+                $ingredients_classic = $recipe->getIngredientList();
+            }else{
+                for($x=0;$x<3; ++$x) {
+                    for ($y = 0; $y < 3; ++$y) {
+                        if(($item = $recipe->getIngredient($x, $y)) instanceof Item){
+                            $ingredients_classic[] = $item;
+                        }
+                        else continue;
+                    }
+                }
+            }
+            for($x = 0; $x < 3; ++$x){
+                for($y = 0; $y < 3; ++$y){
+                    $packet->input[$y * 3 + $x] = ($recipe->getIngredient($x, $y)??Item::get(Item::AIR));
+                }
+            }
+        }
+
 		$canCraft = true;
 
 		if($recipe instanceof ShapedRecipe){
@@ -3054,6 +3075,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		/** @var Item[] $ingredients */
 		$ingredients = $packet->input;
+        if(empty($ingredients)) $ingredients = $ingredients_classic;
 		$result = $packet->output[0];
 
 		if(!$canCraft or !$recipe->getResult()->equals($result)){
