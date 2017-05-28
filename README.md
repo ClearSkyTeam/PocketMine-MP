@@ -15,7 +15,8 @@ ClearSky is a fast Minecraft: Pocket Edition server software, finally back as a 
 ### Setup, help & support, FAQs
 Head over to the [documentation site](http://pmmp.readthedocs.org/).
 If you don't find what you're looking for there, [talk to a human](#discussion). Please do not use our issue tracker for support requests.
-####If you are a Windows user and use "download zip", don't forget:
+
+#### If you are a Windows user and use "download zip", don't forget:
 * ***Raklib: https://github.com/PocketMine/RakLib***
 * ***SPL: https://github.com/PocketMine/PocketMine-SPL***
 * ***Language files: https://github.com/pmmp/PocketMine-Language***
