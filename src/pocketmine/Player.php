@@ -2269,10 +2269,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 		}
 
-		$this->inventory->equipItem($packet->hotbarSlot, $packet->inventorySlot);
-
+		$this->inventory->setHeldItemIndex($packet->hotbarSlot, false, $packet->inventorySlot);
 		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, false);
-
 		return true;
 	}
 
