@@ -108,7 +108,7 @@ class BaseLang{
 	 */
 	public function translateString($str, array $params = [], $onlyPrefix = null){
 		$baseText = $this->get($str);
-		$baseText = $this->parseTranslation(($baseText !== null and ($onlyPrefix === null or strpos($str, $onlyPrefix) === 0)) ? (string)$baseText : (string)$str, (string)$onlyPrefix);
+		$baseText = $this->parseTranslation(($baseText !== null and ($onlyPrefix === null or strpos($str, $onlyPrefix) === 0)) ? $baseText : $str, $onlyPrefix);
 
 		foreach($params as $i => $p){
 			$baseText = str_replace("{%$i}", $this->parseTranslation((string) $p), $baseText, $onlyPrefix);
@@ -120,13 +120,13 @@ class BaseLang{
 	public function translate(TextContainer $c){
 		if($c instanceof TranslationContainer){
 			$baseText = $this->internalGet($c->getText());
-			$baseText = $this->parseTranslation($baseText !== null ? (string)$baseText : (string)$c->getText());
+			$baseText = $this->parseTranslation($baseText !== null ? $baseText : $c->getText());
 
 			foreach($c->getParameters() as $i => $p){
-				$baseText = str_replace("{%$i}", $this->parseTranslation((string) $p), $baseText);
+				$baseText = str_replace("{%$i}", $this->parseTranslation($p), $baseText);
 			}
 		}else{
-			$baseText = $this->parseTranslation((string) $c->getText());
+			$baseText = $this->parseTranslation($c->getText());
 		}
 
 		return $baseText;
@@ -152,7 +152,7 @@ class BaseLang{
 		return $id;
 	}
 
-	protected function parseTranslation(string $text, $onlyPrefix = null){
+	protected function parseTranslation($text, $onlyPrefix = null){
 		$newString = "";
 
 		$replaceString = null;
@@ -191,7 +191,7 @@ class BaseLang{
 		}
 
 		if($replaceString !== null){
-			if(($t = $this->internalGet(substr($replaceString, 1))) !== null and ($onlyPrefix === null or ($onlyPrefix !== "" and strpos($replaceString, $onlyPrefix) === 1))){
+			if(($t = $this->internalGet(substr($replaceString, 1))) !== null and ($onlyPrefix === null or strpos($replaceString, $onlyPrefix) === 1)){
 				$newString .= $t;
 			}else{
 				$newString .= $replaceString;
