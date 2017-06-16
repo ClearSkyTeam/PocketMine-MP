@@ -191,7 +191,7 @@ class BaseLang{
 		}
 
 		if($replaceString !== null){
-			if(($t = $this->internalGet(substr($replaceString, 1))) !== null and ($onlyPrefix === null or strpos($replaceString, $onlyPrefix) === 1)){
+			if(($t = $this->internalGet(substr($replaceString, 1))) !== null and ($onlyPrefix === null or ($onlyPrefix !== "" and strpos($replaceString, $onlyPrefix) === 1))){
 				$newString .= $t;
 			}else{
 				$newString .= $replaceString;
